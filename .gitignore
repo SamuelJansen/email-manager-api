@@ -3,6 +3,19 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+local-config.yml
+*.db
+*.png
+*.mp3
+*.wav
+*-swagger.json
+dummydata/
+secrects.txt
+example.py
+content/
+
+
+
 # C extensions
 *.so
 
