@@ -37,24 +37,6 @@ email:
     contacts:
         the-news: ${THE_NEWS_EMAIL:email@email}
 
-voice-api:
-    base-url: ${AI_VOICE_API_HOST}/voice-manager-api
-    api-key: ${AI_VOICE_API_API_KEY:default}
-    default-timeout-in-seconds: 10
-
-queue:
-    queue-manager-api:
-        emitter:
-            url: ${QUEUE_MANAGER_API_URL}
-        queue:
-            voice-manager-api:
-                speech:
-                    key: ${QUEUE_VOICE_MANAGER_API_KEY}
-        emitter:
-            timeout: 2
-        email-manager-api:
-            api-key: ${EMAIL_QUEUE_API_KEY}
-
 swagger:
     # schemes: [${api.server.scheme}] ###- bug
     # host: ${SWAGGER_HOST:${api.server.host}}:${api.server.port} ###- bug
