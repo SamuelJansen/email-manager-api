@@ -65,7 +65,7 @@ class EmailService:
                     self.processMultipartMessage(messageContent, messageSubject, mailContentDictionary)
                 else:
                     content_type = messageContent.get_content_type()
-                    decodedMessageContent = messageContent.get_payload(decode=True).decode()
+                    decodedMessageContent = messageContent.get_payload(decode=True).decode(encoding=c.UTF_8)
                     if ContentType.TEXT_PLAIN == content_type:
                         self.processTextPlainMessage(messageSubject, decodedMessageContent, mailContentDictionary)
                     elif ContentType.TEXT_HTML == content_type:
@@ -83,8 +83,9 @@ class EmailService:
             content_type = part.get_content_type()
             content_disposition = str(part.get('Content-Disposition'))
             try:
-                decodedMessageContent = part.get_payload(decode=True).decode()
+                decodedMessageContent = part.get_payload(decode=True).decode(encoding=c.UTF_8)
             except Exception as exception:
+                decodedMessageContent = str(part)
                 log.debug(self.processMultipartMessage, f'Not possible to get message content payload from "{messageSubject}" message', exception=exception, muteStackTrace=True)
             if ContentType.TEXT_PLAIN == content_type and 'attachment' not in content_disposition:
                 self.processTextPlainMessage(messageSubject, decodedMessageContent, mailContentDictionary)
