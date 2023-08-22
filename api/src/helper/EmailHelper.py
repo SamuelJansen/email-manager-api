@@ -3,7 +3,7 @@ from email.header import decode_header
 
 from python_helper import Constant as c
 from python_framework import Helper, HelperMethod
-from python_helper import log
+from python_helper import log, ObjectHelper
 
 
 SUBJECT = 'Subject'
@@ -48,14 +48,22 @@ class EmailHelper:
     def getOrigin(self, messageContent):
         log.status(self.getOrigin, f'''Getting origin: {messageContent.get(ORIGIN)}''')
         completeOrigin = decode_header(messageContent.get(ORIGIN))
-        log.status(self.getOrigin, f'Origin: "{completeOrigin}"')
+        log.prettyPython(self.getOrigin, f'Origin', completeOrigin, logLevel=log.STATUS)
         try:
             origin = completeOrigin[-1][0]
             encoding = completeOrigin[1][-1]
+            if ObjectHelper.isNone(origin):
+                origin = completeOrigin[0][0]
+            if ObjectHelper.isNone(encoding):
+                encoding = completeOrigin[0][-1]
         except Exception as exception:
             log.debug(self.getOrigin, f'Not possible to properly parse origin from "{completeOrigin}". Trying again', exception=exception, muteStackTrace=True)
-            origin = completeOrigin[0][0]
-            encoding = completeOrigin[0][-1]
+            # origin = completeOrigin[0][0]
+            # encoding = completeOrigin[0][-1]
+        if ObjectHelper.isNone(origin):
+            origin = 'no.one@send.it'
+        if ObjectHelper.isNone(encoding):
+            encoding = c.UTF_8
         if isinstance(origin, bytes):
             origin = origin.decode(encoding)
         origin = self.getAllBetweenCharacters(str(origin), c.LESSER, c.BIGGER)
